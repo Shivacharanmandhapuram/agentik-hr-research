@@ -1,0 +1,133 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>Key Flows — Sequence Diagrams</title>
+<script src="https://cdn.jsdelivr.net/npm/marked@12/marked.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/mermaid@11/dist/mermaid.min.js"></script>
+<style>
+  :root{
+    --green:#3ecf8e; --green-d:#08301d; --bg:#fcfcfc; --fg:#1a1a1a;
+    --muted:#6b7280; --border:#e4e4e4; --card:#ffffff; --accent:#eafaf1;
+    --code:#f6f8f7;
+  }
+  *{box-sizing:border-box}
+  html{scroll-behavior:smooth}
+  body{margin:0;font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Inter,Roboto,Helvetica,Arial,sans-serif;
+    color:var(--fg);background:var(--bg);line-height:1.6;font-size:15px}
+  a{color:#1a7f54;text-decoration:none} a:hover{text-decoration:underline}
+  .layout{display:grid;grid-template-columns:280px 1fr;max-width:1400px;margin:0 auto;min-height:100vh}
+  /* sidebar */
+  aside{position:sticky;top:0;align-self:start;height:100vh;overflow:auto;border-right:1px solid var(--border);
+    padding:20px 14px;background:#fff}
+  .brand{display:flex;align-items:center;gap:8px;margin-bottom:6px}
+  .brand .logo{width:26px;height:26px;border-radius:7px;background:var(--green);color:var(--green-d);
+    display:flex;align-items:center;justify-content:center;font-weight:800;font-size:13px}
+  .brand b{font-size:15px}
+  .sub{color:var(--muted);font-size:12px;margin:0 0 14px 2px}
+  nav a{display:block;padding:4px 8px;border-radius:6px;color:#374151;font-size:13px}
+  nav a:hover{background:var(--accent);text-decoration:none}
+  nav a.h3{padding-left:20px;color:#6b7280;font-size:12.5px}
+  nav a.active{background:var(--green);color:var(--green-d);font-weight:600}
+  /* content */
+  main{padding:36px 48px;max-width:1000px;overflow:hidden}
+  h1{font-size:30px;border-bottom:2px solid var(--green);padding-bottom:10px;margin-top:0}
+  h2{font-size:23px;margin-top:42px;border-bottom:1px solid var(--border);padding-bottom:6px}
+  h3{font-size:18px;margin-top:30px;color:#111}
+  h4{font-size:15px;margin-top:20px;color:#374151}
+  table{border-collapse:collapse;width:100%;margin:14px 0;font-size:13.5px;display:block;overflow-x:auto}
+  th,td{border:1px solid var(--border);padding:7px 10px;text-align:left;vertical-align:top}
+  th{background:var(--accent);font-weight:600}
+  tr:nth-child(even) td{background:#fafcfb}
+  code{background:var(--code);padding:1.5px 5px;border-radius:4px;font-size:13px;
+    font-family:"SF Mono",ui-monospace,Menlo,Consolas,monospace}
+  pre code{background:none;padding:0}
+  blockquote{margin:14px 0;padding:8px 16px;border-left:3px solid var(--green);background:var(--accent);
+    color:#374151;border-radius:0 6px 6px 0}
+  blockquote p{margin:4px 0}
+  hr{border:none;border-top:1px solid var(--border);margin:30px 0}
+  .mermaid{background:var(--card);border:1px solid var(--border);border-radius:10px;padding:18px;margin:18px 0;
+    text-align:center;overflow-x:auto}
+  .toolbar{position:fixed;top:14px;right:18px;display:flex;gap:8px;z-index:10}
+  .toolbar button{border:1px solid var(--border);background:#fff;border-radius:8px;padding:7px 12px;
+    font-size:13px;cursor:pointer;box-shadow:0 1px 2px rgba(0,0,0,.04)}
+  .toolbar button:hover{border-color:var(--green);color:#1a7f54}
+  @media print{aside,.toolbar{display:none}.layout{grid-template-columns:1fr}main{padding:0}
+    .mermaid{break-inside:avoid}}
+  @media (max-width:900px){.layout{grid-template-columns:1fr}aside{position:static;height:auto;border-right:none;border-bottom:1px solid var(--border)}}
+</style>
+</head>
+<body>
+<div class="toolbar">
+  <button onclick="window.print()">🖨️ Print / Save PDF</button>
+  <button onclick="document.documentElement.requestFullscreen?.()">⛶ Fullscreen</button>
+</div>
+<div class="layout">
+  <aside>
+    <div class="brand"><span class="logo">H</span><b>hragent</b></div>
+    <p class="sub">Architecture &amp; Diagrams</p>
+    <nav id="toc"></nav>
+  </aside>
+  <main id="content"></main>
+</div>
+
+<script type="application/json" id="md">"# Key Flows — Sequence Diagrams\n\nSequence diagrams for the platform's core flows. Rendered with Mermaid.\n\n---\n\n## 1. HRMS Sync (Frappe HR → platform)\n\n```mermaid\nsequenceDiagram\n    actor Admin\n    participant UI as /connections\n    participant API as /api/hrms/sync\n    participant KV as Key Vault\n    participant P as FrappeHrmsProvider\n    participant F as Frappe HR (REST)\n    participant DB as Postgres\n\n    Admin->>UI: Save connection (provider, baseUrl, apiKey, apiSecret)\n    UI->>API: POST /api/hrms/connection\n    API->>KV: storeConnectionSecrets(apiSecret)\n    KV-->>API: kv:hrms-apiSecret-<org>\n    API->>DB: HrmsConnection { config: { apiSecret: \"kv:...\" } }\n    Admin->>API: POST /api/hrms/sync\n    API->>DB: load HrmsConnection\n    API->>KV: resolveConnectionConfig(config)\n    KV-->>API: apiSecret (live)\n    API->>P: listEmployees()\n    P->>F: GET /api/resource/Employee (token auth)\n    F-->>P: employees (name, reports_to, department, ...)\n    P-->>API: HrmsEmployee[] (mapped, dept suffix stripped)\n    API->>DB: upsert Employees + link manager edges + JIT-link users\n    API->>API: provisionColleague(\"hr\") + stamp firstValueAt\n    API-->>Admin: { created, colleague, firstValueAt }\n```\n\n---\n\n## 2. Action with confirmation + Passport gate (apply leave)\n\n```mermaid\nsequenceDiagram\n    actor Emp as Employee\n    participant Chat as /api/assistant/chat\n    participant G as Guardrail screen\n    participant LLM as Azure OpenAI\n    participant PP as Passport gate\n    participant Conf as Confirmation\n    participant Frappe as Frappe HR\n\n    Emp->>Chat: \"apply sick leave 2026-10-05..06\"\n    Chat->>G: screenInput(message)\n    G-->>Chat: allowed\n    Chat->>LLM: chat + tools (auto)\n    alt model narrates instead of calling tool\n        Chat->>LLM: retry toolChoice:\"required\"\n    end\n    LLM-->>Chat: tool_call apply_leave(args)\n    Chat->>Chat: validateWriteSkill(apply_leave)\n    Chat->>PP: ensurePassportForWrite(agent)\n    PP-->>Chat: ok (grade ≥ 85)\n    Chat->>Conf: createConfirmation(apply_leave)\n    Chat-->>Emp: confirmation card\n    Emp->>Conf: confirm\n    Conf->>Frappe: createLeaveApplication() → HR-LAP-xxxx\n    Conf->>Conf: submitForApproval(manager)\n    Conf-->>Emp: \"Filed as HR-LAP-xxxx, sent to <manager>\"\n```\n\n---\n\n## 3. Runtime guardrail screen\n\n```mermaid\nsequenceDiagram\n    actor User\n    participant Chat as /api/assistant/chat\n    participant G as screenInput()\n    participant Audit\n    participant LLM\n\n    User->>Chat: message\n    Chat->>G: screenInput(message)\n    alt injection / extraction detected\n        G-->>Chat: { allowed:false, category }\n        Chat->>Audit: DENY guardrail.block\n        Chat-->>User: safe refusal (no LLM call)\n    else benign\n        G-->>Chat: { allowed:true }\n        Chat->>LLM: proceed\n        LLM-->>User: answer\n    end\n```\n\n---\n\n## 4. Leave write-back round-trip\n\n```mermaid\nsequenceDiagram\n    actor Emp as Employee\n    participant App as applyLeave()\n    participant DB as Postgres\n    participant F as Frappe HR\n    actor Mgr as Manager\n\n    Emp->>App: confirm leave\n    App->>DB: load requester + manager\n    App->>F: POST Leave Application (Open)\n    F-->>App: HR-LAP-xxxx\n    App->>DB: ApprovalRequest { externalRef: HR-LAP-xxxx }\n    App->>Mgr: notification (approval needed)\n    Mgr->>DB: approve → leave.approved\n    Note over Emp,F: Employee sees status in /my-requests;<br/>leave visible in Frappe HR\n```\n\n---\n\n## 5. Class / data model (core entities)\n\n```mermaid\nclassDiagram\n    Organization \"1\" --> \"many\" Employee\n    Organization \"1\" --> \"many\" User\n    Organization \"1\" --> \"1\" HrmsConnection\n    Organization \"1\" --> \"many\" Agent\n    Employee \"1\" --> \"0..1\" User : login link\n    Employee \"1\" --> \"0..1\" Employee : manager\n    Agent \"1\" --> \"many\" AgentPassport\n    KnowledgeSource \"1\" --> \"many\" KnowledgeFolder\n    KnowledgeSource \"1\" --> \"many\" KnowledgeChunk\n    KnowledgeFolder \"1\" --> \"many\" KnowledgeChunk\n    Employee \"1\" --> \"many\" ApprovalRequest : requester\n    Case \"1\" --> \"many\" CaseMessage\n\n    class HrmsConnection {\n      provider\n      config (kv: refs)\n    }\n    class AgentPassport {\n      score\n      grade\n      checks\n    }\n    class KnowledgeFolder {\n      allowedRoles[]\n      allowedDepartments[]\n    }\n```\n"</script>
+<script>
+  const source = JSON.parse(document.getElementById('md').textContent);
+
+  // Render markdown (fenced mermaid blocks are converted below)
+  marked.setOptions({ gfm:true, breaks:false });
+  const contentEl = document.getElementById('content');
+  contentEl.innerHTML = marked.parse(source);
+
+  // Convert <code class="language-mermaid"> blocks into <div class="mermaid">
+  document.querySelectorAll('code.language-mermaid').forEach(code => {
+    const div = document.createElement('div');
+    div.className = 'mermaid';
+    div.textContent = code.textContent;
+    code.closest('pre').replaceWith(div);
+  });
+
+  // Give headings ids + build the TOC (h2 + h3)
+  const toc = document.getElementById('toc');
+  let n = 0;
+  contentEl.querySelectorAll('h2, h3').forEach(h => {
+    const id = 'sec-' + (n++);
+    h.id = id;
+    const a = document.createElement('a');
+    a.href = '#' + id;
+    a.textContent = h.textContent;
+    if (h.tagName === 'H3') a.className = 'h3';
+    toc.appendChild(a);
+  });
+
+  // Mermaid with a green theme to match the product
+  mermaid.initialize({
+    startOnLoad:false,
+    theme:'base',
+    themeVariables:{
+      primaryColor:'#eafaf1', primaryBorderColor:'#3ecf8e', primaryTextColor:'#08301d',
+      lineColor:'#5b9c80', secondaryColor:'#f3f4f3', tertiaryColor:'#ffffff',
+      fontFamily:'-apple-system,Segoe UI,Inter,sans-serif', fontSize:'13px',
+      actorBkg:'#eafaf1', actorBorder:'#3ecf8e', actorTextColor:'#08301d',
+      noteBkgColor:'#fff7e6', noteBorderColor:'#f5c66b'
+    }
+  });
+  mermaid.run({ querySelector:'.mermaid' });
+
+  // Scroll-spy: highlight active TOC item
+  const links = [...toc.querySelectorAll('a')];
+  const map = new Map(links.map(a => [a.getAttribute('href').slice(1), a]));
+  const obs = new IntersectionObserver(entries => {
+    entries.forEach(e => {
+      if (e.isIntersecting) {
+        links.forEach(l => l.classList.remove('active'));
+        map.get(e.target.id)?.classList.add('active');
+      }
+    });
+  }, { rootMargin:'0px 0px -75% 0px' });
+  contentEl.querySelectorAll('h2, h3').forEach(h => obs.observe(h));
+</script>
+</body>
+</html>

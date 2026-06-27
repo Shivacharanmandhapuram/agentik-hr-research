@@ -1,0 +1,182 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>UX Mock — Colleagues Reframe</title>
+<style>
+  :root{ --green:#3ecf8e; --green-d:#08301d; --bg:#fcfcfc; --fg:#1a1a1a; --muted:#6b7280;
+    --border:#e4e4e4; --card:#fff; --accent:#eafaf1; }
+  *{box-sizing:border-box} body{margin:0;font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Inter,sans-serif;
+    background:#f3f4f3;color:var(--fg)}
+  .wrap{max-width:1180px;margin:0 auto;padding:24px}
+  h1{font-size:20px;margin:0 0 4px} .sub{color:var(--muted);font-size:13px;margin:0 0 18px}
+  .banner{background:#fff7e6;border:1px solid #f5c66b;border-radius:8px;padding:8px 14px;font-size:13px;margin-bottom:18px}
+  .frame{background:#fff;border:1px solid var(--border);border-radius:12px;overflow:hidden;box-shadow:0 1px 3px rgba(0,0,0,.05);margin-bottom:34px}
+  .frame-title{font-size:12px;font-weight:700;letter-spacing:.04em;text-transform:uppercase;color:var(--muted);padding:10px 14px;border-bottom:1px solid var(--border);background:#fafcfb}
+  /* app chrome */
+  .app{display:grid;grid-template-columns:210px 1fr;min-height:520px}
+  aside{background:#fff;border-right:1px solid var(--border);padding:14px 10px}
+  .brand{display:flex;align-items:center;gap:8px;margin:4px 6px 16px}
+  .logo{width:26px;height:26px;border-radius:7px;background:var(--green);color:var(--green-d);display:flex;align-items:center;justify-content:center;font-weight:800;font-size:13px}
+  .nav a{display:flex;gap:8px;align-items:center;padding:7px 10px;border-radius:8px;font-size:13.5px;color:#374151;text-decoration:none;margin-bottom:2px}
+  .nav a.active{background:var(--green);color:var(--green-d);font-weight:600}
+  .nav a .i{width:15px;text-align:center}
+  .userbox{margin-top:auto;display:flex;gap:8px;align-items:center;padding:8px 6px}
+  .avatar{width:30px;height:30px;border-radius:50%;background:linear-gradient(135deg,#60a5fa,#a78bfa);color:#fff;display:flex;align-items:center;justify-content:center;font-size:12px;font-weight:600}
+  .badge{display:inline-flex;align-items:center;padding:1px 7px;border-radius:5px;font-size:10px;font-weight:700;background:rgba(62,207,142,.15);color:var(--green-d);border:1px solid rgba(62,207,142,.35)}
+  main{padding:24px 28px}
+  .row{display:flex;align-items:center;justify-content:space-between;margin-bottom:18px}
+  .btn{background:var(--green);color:var(--green-d);border:none;border-radius:9px;padding:9px 16px;font-size:13px;font-weight:600;cursor:pointer}
+  .btn.ghost{background:#fff;border:1px solid var(--border);color:#374151}
+  .grid{display:grid;grid-template-columns:repeat(2,1fr);gap:16px}
+  .card{border:1px solid var(--border);border-radius:12px;padding:18px;background:#fff;position:relative}
+  .card h3{margin:0 0 2px;font-size:15px;display:flex;align-items:center;gap:8px}
+  .card .ic{width:34px;height:34px;border-radius:9px;display:flex;align-items:center;justify-content:center;font-size:18px}
+  .card p{color:var(--muted);font-size:12.5px;margin:8px 0 14px;min-height:32px}
+  .pill{font-size:10px;font-weight:700;padding:2px 8px;border-radius:999px}
+  .pill.live{background:#e6f7ef;color:#137a52;border:1px solid #9ae6c4}
+  .pill.add{background:#f3f4f6;color:#6b7280;border:1px solid #e5e7eb}
+  .stat{display:flex;gap:18px;font-size:12px;color:var(--muted);margin-bottom:12px}
+  .stat b{color:#111}
+  .acts{display:flex;gap:8px}
+  .acts button{font-size:12px;padding:6px 12px;border-radius:8px;border:1px solid var(--border);background:#fff;cursor:pointer}
+  .acts button.primary{background:var(--green);color:var(--green-d);border-color:transparent;font-weight:600}
+  .dashed{border:1.5px dashed #cbd5d3;background:#fafcfb}
+  .hero{display:flex;gap:24px;align-items:center}
+  .hero .big{flex:1}
+  .hero h2{font-size:22px;margin:0 0 6px}
+  .ttv{display:inline-flex;align-items:center;gap:6px;background:#e6f7ef;border:1px solid #9ae6c4;color:#137a52;border-radius:999px;padding:4px 12px;font-size:12px;font-weight:600;margin-top:10px}
+  .chatprev{width:330px;border:1px solid var(--border);border-radius:12px;overflow:hidden}
+  .chatprev .h{background:#fff;border-bottom:1px solid var(--border);padding:8px 12px;font-size:12px;font-weight:600;display:flex;align-items:center;gap:6px}
+  .chatprev .body{padding:12px;background:#fafcfb;font-size:12px;min-height:150px}
+  .bubble{padding:8px 11px;border-radius:12px;margin-bottom:8px;max-width:85%}
+  .bubble.bot{background:#fff;border:1px solid var(--border)}
+  .bubble.me{background:var(--green);color:var(--green-d);margin-left:auto}
+  .step{display:flex;gap:10px;align-items:center;margin-bottom:10px;font-size:13px}
+  .step .n{width:22px;height:22px;border-radius:50%;background:var(--green);color:var(--green-d);font-weight:700;font-size:12px;display:flex;align-items:center;justify-content:center}
+  .step .n.done{background:var(--green)} .step .n.todo{background:#e5e7eb;color:#9ca3af}
+  .note{font-size:12px;color:var(--muted);margin-top:8px}
+</style>
+</head>
+<body>
+<div class="wrap">
+  <h1>UX Mock — Colleagues Reframe</h1>
+  <p class="sub">Static, non-functional. For review before any wiring. Green = Supabase theme already shipped.</p>
+  <div class="banner"><b>What changed:</b> the front door is now <b>Colleagues</b> (pre-built HR/IT/Finance), the HR Colleague is <b>auto-deployed on HRMS sync</b>, and the old builder is demoted to <b>“Customize.”</b> The engine underneath is unchanged.</div>
+
+  <!-- SCREEN 1: Onboarding "your HR colleague is live" moment -->
+  <div class="frame">
+    <div class="frame-title">Screen 1 — Onboarding moment (after “Connect HRMS”) · ONB-1, ONB-2</div>
+    <div style="padding:28px">
+      <div class="hero">
+        <div class="big">
+          <div class="badge">Setup · step 2 of 2</div>
+          <h2 style="margin-top:10px">🎉 Your <b>HR Colleague</b> is live.</h2>
+          <p class="sub">We synced 142 employees, mapped managers &amp; teams, set everyone’s role to <b>Employee</b>, and deployed your HR Colleague with starter HR knowledge + leave/profile skills — all automatically.</p>
+          <div class="ttv">⚡ Time to first value: <b>&nbsp;3 min 12 s</b></div>
+          <div style="margin-top:18px;display:flex;gap:10px">
+            <button class="btn">Open HR Colleague</button>
+            <button class="btn ghost">Customize</button>
+            <button class="btn ghost">Invite employees</button>
+          </div>
+          <p class="note">Next (optional): add IT or Finance colleagues, upload your handbook, tweak guardrails.</p>
+        </div>
+        <div class="chatprev">
+          <div class="h"><span class="logo" style="width:18px;height:18px;font-size:10px">H</span> HR Colleague · live</div>
+          <div class="body">
+            <div class="bubble bot">Hi! I’m your HR Colleague. Ask me about leave, your profile, or HR policies.</div>
+            <div class="bubble me">What’s my leave balance?</div>
+            <div class="bubble bot">You have <b>17 days PTO</b> and <b>9 sick days</b> remaining.</div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- SCREEN 2: Colleagues home (new front door) -->
+  <div class="frame">
+    <div class="frame-title">Screen 2 — Colleagues home (new front door, replaces “Agents Studio”) · CAT-1, CAT-5</div>
+    <div class="app">
+      <aside style="display:flex;flex-direction:column">
+        <div class="brand"><span class="logo">H</span><b>hragent</b><span style="margin-left:auto">🔔</span></div>
+        <div class="nav">
+          <a class="active"><span class="i">🧑‍🤝‍🧑</span> Colleagues</a>
+          <a><span class="i">📚</span> Knowledge</a>
+          <a><span class="i">💬</span> Live Inbox</a>
+          <a><span class="i">📊</span> Analytics</a>
+          <a><span class="i">🪪</span> Directory</a>
+        </div>
+        <div class="userbox">
+          <div class="avatar">A</div>
+          <div><div style="font-size:13px;font-weight:600">Alice Johnson</div><span class="badge">Owner</span></div>
+        </div>
+      </aside>
+      <main>
+        <div class="row">
+          <div><h1 style="font-size:19px">Colleagues</h1><p class="sub" style="margin:2px 0 0">Your AI workforce. Pre-built per function, governed by default.</p></div>
+          <button class="btn">+ Add a colleague</button>
+        </div>
+        <div class="grid">
+          <div class="card">
+            <div style="display:flex;justify-content:space-between;align-items:flex-start">
+              <h3><span class="ic" style="background:#e6f7ef">🧑‍💼</span> HR Colleague</h3>
+              <span class="pill live">● Live · Deployed</span>
+            </div>
+            <p>Leave, profile, HR policy Q&amp;A, case escalation. Auto-deployed on HRMS sync.</p>
+            <div class="stat"><span><b>142</b> employees</span><span><b>318</b> chats</span><span><b>71%</b> deflected</span></div>
+            <div class="acts"><button class="primary">Open</button><button>Customize</button><button>Chat</button></div>
+          </div>
+
+          <div class="card dashed">
+            <div style="display:flex;justify-content:space-between;align-items:flex-start">
+              <h3><span class="ic" style="background:#eef2ff">💻</span> IT Colleague</h3>
+              <span class="pill add">Available</span>
+            </div>
+            <p>Password resets, access requests, device &amp; software help. Pre-seeded IT skills + starter KB.</p>
+            <div class="stat"><span>Template ready · 1-click</span></div>
+            <div class="acts"><button class="primary">+ Add</button><button>Preview</button></div>
+          </div>
+
+          <div class="card dashed">
+            <div style="display:flex;justify-content:space-between;align-items:flex-start">
+              <h3><span class="ic" style="background:#fef3c7">💰</span> Finance Colleague</h3>
+              <span class="pill add">Available</span>
+            </div>
+            <p>Expense, reimbursement, payroll questions. Pre-seeded finance skills + starter KB.</p>
+            <div class="stat"><span>Template ready · 1-click</span></div>
+            <div class="acts"><button class="primary">+ Add</button><button>Preview</button></div>
+          </div>
+
+          <div class="card dashed">
+            <div style="display:flex;justify-content:space-between;align-items:flex-start">
+              <h3><span class="ic" style="background:#f3f4f6">✨</span> Custom Colleague</h3>
+              <span class="pill add">Advanced</span>
+            </div>
+            <p>Start from scratch — the full builder (the old “Agent Studio”), now behind a working default.</p>
+            <div class="stat"><span>For edge cases</span></div>
+            <div class="acts"><button>Start from scratch</button></div>
+          </div>
+        </div>
+      </main>
+    </div>
+  </div>
+
+  <!-- SCREEN 3: Add-a-colleague catalogue -->
+  <div class="frame">
+    <div class="frame-title">Screen 3 — “Add a colleague” catalogue (vs old blank create) · CAT-1, CAT-2, CAT-4</div>
+    <div style="padding:24px 28px">
+      <div class="row"><div><h1 style="font-size:18px">Add a colleague</h1><p class="sub" style="margin:2px 0 0">Pick a pre-built colleague — it works on day one. You can customize after.</p></div><button class="btn ghost">✕ Close</button></div>
+      <div class="grid">
+        <div class="card"><h3><span class="ic" style="background:#eef2ff">💻</span> IT Colleague</h3><p>Pre-seeded: reset password, request access, software/device help · starter IT KB.</p><div class="acts"><button class="primary">+ Add</button><button>Preview</button></div></div>
+        <div class="card"><h3><span class="ic" style="background:#fef3c7">💰</span> Finance Colleague</h3><p>Pre-seeded: expenses, reimbursements, payroll FAQ · starter finance KB.</p><div class="acts"><button class="primary">+ Add</button><button>Preview</button></div></div>
+        <div class="card"><h3><span class="ic" style="background:#e6f7ef">🧑‍💼</span> HR Colleague</h3><p>Already live in your workspace.</p><div class="acts"><button>✓ Added</button></div></div>
+        <div class="card dashed"><h3><span class="ic" style="background:#f3f4f6">✨</span> Start from scratch</h3><p>Blank custom colleague — name, purpose, instructions, knowledge, skills, guardrails.</p><div class="acts"><button>Build custom</button></div></div>
+      </div>
+    </div>
+  </div>
+
+  <p class="note">Screens 1–3 are the only new/changed surfaces. “Customize” reuses the existing builder screens unchanged. Employee <code>/assistant</code>, approvals, inbox, RBAC — all unchanged.</p>
+</div>
+</body>
+</html>
