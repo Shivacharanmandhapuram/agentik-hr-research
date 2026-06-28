@@ -43,7 +43,7 @@ auditView · agentManage · knowledgeManage · directoryView · hrmsManage
 
 ## 3. Colleague-scoped support (assignment groups)
 
-Each AI Colleague can have a **support team** (like ServiceNow's assignment groups):
+Each AI Colleague can have a **support team** (assignment groups):
 
 ```
 Admin assigns Hana → HR Colleague support team
@@ -133,23 +133,6 @@ Support agents reach the dashboard via `inboxView: true` (from their colleague-s
 | Concurrent multi-role access | ✅ 8 personas simultaneously |
 | Cross-org isolation | ✅ 14/14 IDOR attacks blocked |
 | Colleague-scoped support | ✅ Sneha/Hana see only HR queue |
-
----
-
-## 8. How it compares
-
-| Capability | Leena AI | ServiceNow | Ours |
-|-----------|----------|------------|------|
-| Identity from HRMS | ✅ IdP inheritance | ✅ LDAP/SCIM | ✅ Frappe sync → auto roles |
-| Manager auto-detection | ✅ | ✅ | ✅ (reports_to chain) |
-| Role-based knowledge | ✅ | ✅ | ✅ Tiered folders |
-| Dept-scoped knowledge | ✅ | ✅ | ✅ allowedDepartments |
-| Assignment groups (scoped support) | ✅ | ✅ | ✅ Colleague-scoped bindings |
-| Approval routing | ✅ | ✅ | ✅ Manager chain + dept head |
-| Audit trail | ✅ | ✅ | ✅ Every action logged |
-| 200+ integrations | ✅ | ✅ | ❌ 1 live (Frappe) |
-| Visual role editor | ✅ | ✅ | ⚠️ Basic UI |
-| SCIM/SAML provisioning | ✅ | ✅ | ❌ Manual sync |
 
 ---
 

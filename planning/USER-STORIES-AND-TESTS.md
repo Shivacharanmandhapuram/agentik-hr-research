@@ -1,6 +1,6 @@
-# User Stories & Test Scenarios — Mini-Leena AI Colleagues Platform
+# User Stories & Test Scenarios — AI Colleagues Platform
 
-> Scope: the multi-domain AI Colleagues platform for SMBs (50–800 employees), deployed on
+> Scope: the multi-domain AI Colleagues platform, deployed on
 > Azure Container Apps. This document is the consolidated SCRUM artifact for everything
 > shipped through **S0–S7 + P0–P3**, including the live **Frappe HR** connector.
 >

@@ -1,15 +1,13 @@
-# Project Agentik — Agentic HR · Engineering Research & Design
+# Agentic HR — Engineering & Design
 
-Internal engineering, research and planning workspace for the **Agentic HR** build — the homework
-behind the product. This is the material we worked from to design and plan the system: competitor
-research, the architecture, the data model, the access-control rules, the core flows, and the staged
-build plan.
+Design and engineering notes for an **agentic HR assistant** — a personal project exploring how to
+build a governed, action-oriented HR agent. This repo holds the architecture, the data model, the
+access-control design, the core flows, and the design of the orchestrator and the per-domain colleagues.
 
 ### Contents
-- **`diagrams/`** — system architecture, sequence flows, the RBAC access charts, the UML / class
-  (data) model, and the UX concept. (Open the `.html` files for the rendered diagrams.)
-- **`design/`** — the orchestrator design, the scale & roles design, and the HRMS-deepening plan.
-- **`planning/`** — research findings & synthesis (how the leading platforms are built), the
-  competitive benchmark, the product strategy, the full staged plan, and the user stories.
+- **`diagrams/`** — system architecture, sequence flows, the RBAC access charts, the UML / data
+  model, and a UX concept. (Open the `.html` files for the rendered diagrams.)
+- **`design/`** — the orchestrator design, the scale & roles design, and the HRMS integration plan.
+- **`planning/`** — user stories and test scenarios.
 
-> This repository holds **design and research artifacts only** — not the product source code.
+> Design & engineering artifacts only.

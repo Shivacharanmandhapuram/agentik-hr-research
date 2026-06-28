@@ -30,13 +30,13 @@ Frappe modules present but **empty** (need seeding): Salary Structure/Slip, Atte
 
 ## Phase 1 — Compulsory BRD *Musts* + write-back integrity
 
-**Goal:** close the two Must gaps the client flagged (FR-04, FR-03) and fix the leave write-back round-trip so approvals are truly agentic.
+**Goal:** close the two Must gaps (FR-04, FR-03) and fix the leave write-back round-trip so approvals are truly agentic.
 
 ### 1a. FR-04 — Company policy vs. general guidance (Must)
 - Tag every answer's knowledge with its **source type**. When grounded in an attached company doc → label **"📄 Company policy"** + citation. When NOT grounded → explicitly say **"No company policy found — here's general HR guidance:"** and never present it as official.
 - Implementation: extend `searchKnowledge` results with source label; enforce in the system prompt; add a citation/footer line to grounded answers.
 
-### 1b. FR-03 — "What-if" HR questions (Must per client)
+### 1b. FR-03 — "What-if" HR questions (Must)
 - Policy-grounded scenario answers that **state assumptions**, **cite the policy rule**, and **ask non-sensitive follow-ups** when inputs are missing (e.g. "resignation notice impact", "leave eligibility if I joined in March").
 - Implementation: a dedicated prompt path for conditional/scenario intents + ground in leave policy / notice-period knowledge; label assumptions.
 

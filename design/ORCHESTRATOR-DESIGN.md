@@ -1,6 +1,6 @@
 # AI Orchestrator — Architecture (Shipped)
 
-> The Leena-style brain that turns one employee chat into a multi-colleague experience.
+> The orchestrator brain that turns one employee chat into a multi-colleague experience.
 > It understands the request, routes to the right colleague(s), shows its thinking, and answers
 > the right thing to the right person with the right access. **All stages shipped and live.**
 
@@ -107,20 +107,6 @@ Extensible: can add cost-tier routing (cheap model for FAQ, expensive for comple
 
 ---
 
-## How it compares to Leena AI's Orchestrator
-
-| Capability | Leena AI | Our orchestrator |
-|-----------|----------|-----------------|
-| LLM-based planning | ✅ Model-agnostic (WorkLM, GPT, Claude, Llama) | ✅ Azure OpenAI (gpt-4o, gpt-4o-planner) |
-| Sub-task decomposition | ✅ Breaks into tasks, routes to AI Colleagues | ✅ planRequest → 1–3 per-domain sub-tasks |
-| Multi-model routing | ✅ Per-task model selection | ✅ pickModel(task) |
-| Thinking trace / explainability | ✅ Decision traces | ✅ /plan endpoint + UI panel |
-| A2A handoff between agents | ✅ Native A2A protocol | ⚠️ Internal fan-out (not A2A protocol yet) |
-| Deterministic process rails (AOPs) | ✅ Explicit workflow graphs | ⚠️ Skills are code, not visual workflow |
-| 200+ integrations | ✅ Pre-built | ❌ 1 live (Frappe HR) + mock IT/Finance |
-
----
-
 ## Data flow (end-to-end)
 
 1. **Employee sends message** → `POST /api/assistant/chat`
@@ -150,9 +136,9 @@ Extensible: can add cost-tier routing (cheap model for FAQ, expensive for comple
 
 - **Max 3 sub-tasks** — complex requests spanning 4+ domains get capped
 - **No A2A protocol** — internal dispatch, not standards-based agent-to-agent
-- **No visual workflow editor** — skills are code (Leena has Workflow Studio)
-- **Single LLM provider** — Azure OpenAI only (Leena is model-agnostic)
-- **No scheduled/proactive triggers** — reactive only (Leena's colleagues can reach out)
+- **No visual workflow editor** — skills are code
+- **Single LLM provider** — Azure OpenAI only
+- **No scheduled/proactive triggers** — reactive only
 
 ---
 
